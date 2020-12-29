@@ -1,5 +1,6 @@
 # MacOS Folder
 .idea/
+.DS_Store
 
 #Youtube credentials
 client_secret.json
