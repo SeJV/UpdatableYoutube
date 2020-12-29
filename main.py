@@ -55,15 +55,15 @@ def main():
             time_delta = round(time_delta / DAY)
             time_delta_str = str(time_delta) + " day"
         elif WEEK <= time_delta < MONTH:
-            sleep_for = DAY
+            sleep_for = HOUR
             time_delta = round(time_delta / WEEK)
             time_delta_str = str(time_delta) + " week"
         elif MONTH <= time_delta < YEAR:
-            sleep_for = WEEK
+            sleep_for = DAY
             time_delta = round(time_delta / MONTH)
             time_delta_str = str(time_delta) + " month"
         elif YEAR <= time_delta:
-            sleep_for = MONTH
+            sleep_for = DAY
             time_delta = round(time_delta / YEAR)
             time_delta_str = str(time_delta) + " year"
 
