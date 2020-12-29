@@ -10,10 +10,15 @@ import time
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
+from googleapiclient.http import MediaFileUpload
 
-scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
+from draw_text import draw_thumbnail
 
-UPLOAD_TIME = 1609274732
+scopes = ["https://www.googleapis.com/auth/youtube.readonly", "https://www.googleapis.com/auth/youtube.force-ssl"]
+
+VIDEO_ID = "4jfa0o7P-BA"
+
+UPLOAD_TIME = 1609274610
 MINUTE = 60
 HOUR = 60 * MINUTE
 DAY = 24 * HOUR
@@ -38,31 +43,57 @@ def main():
         current_time = time.time()
         time_delta = current_time - UPLOAD_TIME
         sleep_for = MINUTE
+        time_delta_str = ""
         if 0 <= time_delta < HOUR:
-            time_delta = str(round(time_delta / MINUTE)) + " minutes"
+            time_delta = round(time_delta / MINUTE)
+            time_delta_str = str(time_delta) + " minute"
         elif HOUR <= time_delta < DAY:
-            time_delta = str(round(time_delta / HOUR)) + " hours"
+            time_delta = round(time_delta / HOUR)
+            time_delta_str = str(time_delta) + " hour"
         elif DAY <= time_delta < WEEK:
             sleep_for = HOUR
-            time_delta = str(round(time_delta / DAY)) + " days"
+            time_delta = round(time_delta / DAY)
+            time_delta_str = str(time_delta) + " day"
         elif WEEK <= time_delta < MONTH:
             sleep_for = DAY
-            time_delta = str(round(time_delta / WEEK)) + " weeks"
+            time_delta = round(time_delta / WEEK)
+            time_delta_str = str(time_delta) + " week"
         elif MONTH <= time_delta < YEAR:
             sleep_for = WEEK
-            time_delta = str(round(time_delta / MONTH)) + " months"
+            time_delta = round(time_delta / MONTH)
+            time_delta_str = str(time_delta) + " month"
         elif YEAR <= time_delta:
             sleep_for = MONTH
-            time_delta = str(round(time_delta / YEAR)) + " years"
+            time_delta = round(time_delta / YEAR)
+            time_delta_str = str(time_delta) + " year"
 
+        if time_delta > 1:
+            time_delta_str += "s"
+
+        request = youtube.videos().list(
+            part="statistics",
+            id=VIDEO_ID
+        )
+        response = request.execute()
+        viewCounts = response['items'][0]['statistics']['viewCount']
+
+        title = f"This video was uploaded {time_delta_str} ago."
+        subtitle = f"And has {viewCounts} views"
+
+        draw_thumbnail(title, subtitle)
+        request = youtube.thumbnails().set(
+            videoId=VIDEO_ID,
+            media_body=MediaFileUpload("./thumbnail.jpg")
+        )
+        request.execute()
         request = youtube.videos().update(
             part="snippet",
             body={
-                "id": "4jfa0o7P-BA",
+                "id": VIDEO_ID,
                 "snippet": {
                     "categoryId": 22,
                     "defaultLanguage": "en",
-                    "title": f"This video was uploaded {time_delta} ago.",
+                    "title": title + " " + subtitle,
                     "description": """
                         reload the page and watch it update.
                         the github project for this video can be found on: https://github.com/SeJV/UpdatableYoutube
