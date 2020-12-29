@@ -19,6 +19,7 @@ scopes = ["https://www.googleapis.com/auth/youtube.readonly", "https://www.googl
 VIDEO_ID = "4jfa0o7P-BA"
 
 UPLOAD_TIME = 1609274610
+
 MINUTE = 60
 HOUR = 60 * MINUTE
 DAY = 24 * HOUR
@@ -42,29 +43,29 @@ def main():
     while True:
         current_time = time.time()
         time_delta = current_time - UPLOAD_TIME
-        sleep_for = MINUTE
+        sleep_for = 10 * MINUTE
         time_delta_str = ""
         if 0 <= time_delta < HOUR:
-            time_delta = round(time_delta / MINUTE)
+            time_delta = int(time_delta / MINUTE)
             time_delta_str = str(time_delta) + " minute"
         elif HOUR <= time_delta < DAY:
-            time_delta = round(time_delta / HOUR)
+            time_delta = int(time_delta / HOUR)
             time_delta_str = str(time_delta) + " hour"
         elif DAY <= time_delta < WEEK:
             sleep_for = HOUR
-            time_delta = round(time_delta / DAY)
+            time_delta = int(time_delta / DAY)
             time_delta_str = str(time_delta) + " day"
         elif WEEK <= time_delta < MONTH:
             sleep_for = HOUR
-            time_delta = round(time_delta / WEEK)
+            time_delta = int(time_delta / WEEK)
             time_delta_str = str(time_delta) + " week"
         elif MONTH <= time_delta < YEAR:
             sleep_for = DAY
-            time_delta = round(time_delta / MONTH)
+            time_delta = int(time_delta / MONTH)
             time_delta_str = str(time_delta) + " month"
         elif YEAR <= time_delta:
             sleep_for = DAY
-            time_delta = round(time_delta / YEAR)
+            time_delta = int(time_delta / YEAR)
             time_delta_str = str(time_delta) + " year"
 
         if time_delta > 1:
