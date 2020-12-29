@@ -14,7 +14,7 @@ def draw_thumbnail(title: str, subtitle: str) -> None:
     title_w, title_h = draw.textsize(title, font=title_font)
     draw.text(((W - title_w) / 2, (H - title_h) / 2 - 50), title, font=title_font, fill=(255, 255, 255))
 
-    subtitle_font = ImageFont.truetype("./OpenSans-Regular.ttf", 45)
+    subtitle_font = ImageFont.truetype("./OpenSans-Regular.ttf", 52)
     subtitle_w, subtitle_h = draw.textsize(subtitle, font=subtitle_font)
     draw.text(((W - subtitle_w) / 2, (H - subtitle_h) / 2 + 50), subtitle, font=subtitle_font, fill=(255, 255, 255))
 
