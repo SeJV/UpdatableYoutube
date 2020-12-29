@@ -6,7 +6,7 @@ W = 1280
 H = 720
 
 
-def draw_thumbnail(title: str, subtitle: str) -> None:
+def draw_thumbnail(title: str, subtitle: str, other_subtitle: str) -> None:
     img = Image.new('RGB', (W, H), (0, 0, 0))
     draw = ImageDraw.Draw(img)
 
@@ -16,7 +16,10 @@ def draw_thumbnail(title: str, subtitle: str) -> None:
 
     subtitle_font = ImageFont.truetype("./OpenSans-Regular.ttf", 52)
     subtitle_w, subtitle_h = draw.textsize(subtitle, font=subtitle_font)
-    draw.text(((W - subtitle_w) / 2, (H - subtitle_h) / 2 + 50), subtitle, font=subtitle_font, fill=(255, 255, 255))
+    draw.text(((W - subtitle_w) / 2, (H - subtitle_h) / 2 + 70), subtitle, font=subtitle_font, fill=(255, 255, 255))
+
+    subtitle_w, subtitle_h = draw.textsize(other_subtitle, font=subtitle_font)
+    draw.text(((W - subtitle_w) / 2, (H - subtitle_h) / 2 + 140), other_subtitle, font=subtitle_font, fill=(255, 255, 255))
 
     with open('thumbnail.jpg', 'w') as outfile:
         img.save(outfile, 'JPEG')

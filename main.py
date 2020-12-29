@@ -76,12 +76,17 @@ def main():
             id=VIDEO_ID
         )
         response = request.execute()
-        viewCounts = response['items'][0]['statistics']['viewCount']
+
+        stats = response['items'][0]['statistics']
+        view_count = stats['viewCount']
+        like_count = stats['likeCount']
+        comment_count = stats['commentCount']
 
         title = f"This video was uploaded {time_delta_str} ago."
-        subtitle = f"And has {viewCounts} views"
+        subtitle = f"And has {view_count} views"
+        other_subtitle = f"with {like_count} likes and {comment_count} comments."
 
-        draw_thumbnail(title, subtitle)
+        draw_thumbnail(title, subtitle, other_subtitle)
         request = youtube.thumbnails().set(
             videoId=VIDEO_ID,
             media_body=MediaFileUpload("./thumbnail.jpg")
@@ -94,7 +99,7 @@ def main():
                 "snippet": {
                     "categoryId": 22,
                     "defaultLanguage": "en",
-                    "title": title + " " + subtitle,
+                    "title": title + " " + subtitle + " " + other_subtitle,
                     "description": """
                         reload the page and watch it update.
                         the github project for this video can be found on: https://github.com/SeJV/UpdatableYoutube
