@@ -4,6 +4,7 @@
 
 #Youtube credentials
 client_secret.json
+credentials.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
