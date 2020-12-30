@@ -4,8 +4,10 @@
 # See instructions for running these code samples locally:
 # https://developers.google.com/explorer-help/guides/code_samples#python
 
+import os
 import json
 import time
+import logging
 
 import google_auth_oauthlib.flow
 import google.oauth2.credentials
@@ -51,14 +53,14 @@ class UpdateYoutubeVideoDeamon(run.RunDaemon):
         #     client_secrets_file, scopes)
         # credentials = credentials_to_dict(flow.run_console())
 
-        with open('credentials.json') as infile:
+        with open(os.path.join(os.getcwd(), "credentials.json")) as infile:
             credentials = json.load(infile)
 
         while True:
-            with open('credentials.json', 'w') as outfile:
+            with open(os.path.join(os.getcwd(), "credentials.json"), 'w') as outfile:
                 json.dump(credentials, outfile, indent=2)
 
-            with open('credentials.json') as infile:
+            with open(os.path.join(os.getcwd(), "credentials.json")) as infile:
                 credentials = json.load(infile)
             credentials = google.oauth2.credentials.Credentials(**credentials)
             youtube = googleapiclient.discovery.build(
@@ -120,7 +122,7 @@ class UpdateYoutubeVideoDeamon(run.RunDaemon):
             draw_thumbnail(title, subtitle, other_subtitle)
             request = youtube.thumbnails().set(
                 videoId=VIDEO_ID,
-                media_body=MediaFileUpload("./thumbnail.jpg")
+                media_body=MediaFileUpload(os.path.join(os.getcwd(), "thumbnail.jpg"))
             )
             request.execute()
             request = youtube.videos().update(
@@ -187,6 +189,5 @@ Dynamic updatable Thumbnail"""
                 }
             )
             response = request.execute()
-            print('UPDATED TO: ', response['snippet']['title'])
-
+            logging.info("UPDATED TO: ", response["snippet"]["title"])
             time.sleep(MINUTE)
