@@ -57,8 +57,6 @@ def main():
         with open('credentials.json', 'w') as outfile:
             json.dump(credentials, outfile, indent=2)
 
-        time.sleep(6 * MINUTE)
-
         with open('credentials.json') as infile:
             credentials = json.load(infile)
         credentials = google.oauth2.credentials.Credentials(**credentials)
@@ -189,6 +187,8 @@ Dynamic updatable Thumbnail"""
         )
         response = request.execute()
         print('UPDATED TO: ', response['snippet']['title'])
+
+        time.sleep(6 * MINUTE)
 
 
 if __name__ == "__main__":
