@@ -44,6 +44,13 @@ def credentials_to_dict(credentials) -> dict:
 
 class UpdateYoutubeVideoDeamon(run.RunDaemon):
     def run(self):
+        """
+        This function will update the thumbnail and title of the video linked to the ID given above.
+        It measures the time difference since the upload, as well as counting the views and comments.
+
+        After that, a thumbnail with these information is drawn, and the video is updated. This will run every 20
+        Minutes, so that those information is kept up to date.
+        """
         api_service_name = "youtube"
         api_version = "v3"
 
@@ -106,14 +113,18 @@ class UpdateYoutubeVideoDeamon(run.RunDaemon):
             def format_counter(count: str) -> str:
                 count = int(count)
                 if 1000 <= count < 10000:
-                    return str(round(count / 1000, 1)) + "K"
-                elif 10000 <= count < 1000000:
-                    return str(round(count / 1000)) + "K"
+                    if int(count / 100) % 10 == 0:  # if count is between 1.000 and 1.099
+                        return "1K"
+                    return str(int(count / 100) / 10) + "K"   # if count is between 1.100 and 9.999 return "{n}.{d}K"
+                elif 10000 <= count < 1000000:   # if count is between 10.000 and 999.999 return "{n}K"
+                    return str(int(count / 1000)) + "K"
                 elif 1000000 <= count < 10000000:
-                    return str(round(count / 1000000, 1)) + "M"
+                    if int(count / 100000) % 10 == 0:  # if count is between 1.000.000 and 1.099.999
+                        return "1M"
+                    return str(int(count / 100000) / 10) + "M"  # if count is between 1.100.000 and 9.999.999 return "{n}.{d}M"
                 elif 10000000 < count:
-                    return str(round(count / 1000000)) + "M"
-                return str(count)
+                    return str(int(count / 1000000)) + "M"  # if count is between 10.000.000 and 999.999.999 return "{n}M"
+                return str(count)  # if count is under 1000 return count without rounding
 
             title = f"{time_delta_str} ago."
             subtitle = f"Has {format_counter(view_count)} views"
