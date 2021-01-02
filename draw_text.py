@@ -26,17 +26,3 @@ def draw_thumbnail(title: str, subtitle: str, other_subtitle: str) -> None:
         img.save(outfile, 'JPEG')
 
 
-
-
-def format_counter(count: str) -> str:
-    count = int(count)
-    if 1000 <= count < 10000:
-        return str(round(count / 1000, 1)) + "K"
-    elif 10000 <= count < 1000000:
-        return str(round(count / 1000)) + "K"
-    elif 1000000 <= count < 10000000:
-        return str(round(count / 1000000, 1)) + "M"
-    elif 10000000 < count:
-        return str(round(count / 1000000)) + "M"
-    return str(count)
-
